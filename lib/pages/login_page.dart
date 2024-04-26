@@ -1,4 +1,5 @@
 import 'package:chat/constants.dart';
+import 'package:chat/cubits/chat/chat_cubit.dart';
 import 'package:chat/cubits/login/login_cubit.dart';
 import 'package:chat/cubits/login/login_state.dart';
 import 'package:chat/helper/show_snack_bar.dart';
@@ -10,31 +11,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
-
 class LoginPage extends StatelessWidget {
-    static String id = 'login page';
- LoginPage({super.key});
+  static String id = 'login page';
+  LoginPage({super.key});
   bool isLoading = false;
 
-  GlobalKey<FormState> formKey = GlobalKey();
-
+  final _formKey = GlobalKey<FormState>();
   String? email, password;
 
- 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if(state is LoginLoading){
+        if (state is LoginLoading) {
           isLoading = true;
-        }else if(state is LoginSuccess){
+        } else if (state is LoginSuccess) {
+          BlocProvider.of<ChatCubit>(context).getMessages();
+          Navigator.pushNamed(context, ChatPage.id, arguments: email);
           isLoading = false;
-          Navigator.pushNamed(context, ChatPage.id);
-        }else if(state is LoginFailure){
+        } else if (state is LoginFailure) {
           isLoading = false;
           showSnackBar(context, state.errMessage);
         }
-
       },
       builder: (context, state) {
         return ModalProgressHUD(
@@ -44,7 +42,7 @@ class LoginPage extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Form(
-                key: formKey,
+                key: _formKey,
                 child: ListView(
                   children: [
                     const SizedBox(
@@ -105,8 +103,9 @@ class LoginPage extends StatelessWidget {
                     ),
                     CustomButon(
                       onTap: () async {
-                        if (formKey.currentState!.validate()) {
-                          BlocProvider.of<LoginCubit>(context).loginUser(email: email!, password: password!);
+                        if (_formKey.currentState!.validate()) {
+                          BlocProvider.of<LoginCubit>(context)
+                              .loginUser(email: email!, password: password!);
                         } else {}
                       },
                       text: 'LOGIN',

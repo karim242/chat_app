@@ -5,9 +5,9 @@ import '../constants.dart';
 
 class ChatBuble extends StatelessWidget {
   const ChatBuble({
-    Key? key,
+    super.key,
     required this.message,
-  }) : super(key: key);
+  });
 
   final Message message;
   @override
@@ -38,9 +38,9 @@ class ChatBuble extends StatelessWidget {
 
 class ChatBubleForFriend extends StatelessWidget {
   const ChatBubleForFriend({
-    Key? key,
+    super.key,
     required this.message,
-  }) : super(key: key);
+  });
 
   final Message message;
   @override

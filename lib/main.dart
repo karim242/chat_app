@@ -1,3 +1,4 @@
+import 'package:chat/cubits/chat/chat_cubit.dart';
 import 'package:chat/cubits/login/login_cubit.dart';
 import 'package:chat/cubits/register/register_cubit.dart';
 import 'package:chat/firebase_options.dart';
@@ -28,6 +29,9 @@ class ScholarChat extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => RegisterCubit(),
+        ),
+          BlocProvider(
+          create: (context) => ChatCubit(),
         ),
       ],
       child: MaterialApp(
