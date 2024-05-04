@@ -1,6 +1,6 @@
-import 'package:chat/cubits/chat/chat_cubit.dart';
-import 'package:chat/cubits/login/login_cubit.dart';
-import 'package:chat/cubits/register/register_cubit.dart';
+import 'package:chat/bloc_observer.dart';
+import 'package:chat/blocs/auth/auth_bloc.dart';
+import 'package:chat/blocs/chat/chat_cubit.dart';
 import 'package:chat/firebase_options.dart';
 import 'package:chat/pages/chat_page.dart';
 import 'package:chat/pages/login_page.dart';
@@ -14,7 +14,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const ScholarChat());
+  BlocOverrides.runZoned(
+    () {
+      runApp(const ScholarChat());
+    },
+    blocObserver: SimpleBlocObserver()
+  );
 }
 
 class ScholarChat extends StatelessWidget {
@@ -25,19 +30,16 @@ class ScholarChat extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => LoginCubit(),
+          create: (context) => AuthBloc(),
         ),
         BlocProvider(
-          create: (context) => RegisterCubit(),
-        ),
-          BlocProvider(
           create: (context) => ChatCubit(),
         ),
       ],
       child: MaterialApp(
         routes: {
           LoginPage.id: (context) => LoginPage(),
-          RegisterPage.id: (context) =>  RegisterPage(),
+          RegisterPage.id: (context) => RegisterPage(),
           ChatPage.id: (context) => ChatPage()
         },
         initialRoute: LoginPage.id,

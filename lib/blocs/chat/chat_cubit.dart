@@ -1,5 +1,5 @@
 import 'package:chat/constants.dart';
-import 'package:chat/cubits/chat/chat_state.dart';
+import 'package:chat/blocs/chat/chat_state.dart';
 import 'package:chat/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
